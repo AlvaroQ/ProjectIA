@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { Sparkles, TrendingUp, Search, Zap, GraduationCap } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0f]">
+    <div className="relative h-screen overflow-hidden bg-[#0a0a0f]">
       {/* Gradient mesh background */}
       <div className="gradient-mesh absolute inset-0 opacity-60" />
 
@@ -24,7 +25,7 @@ export default function Home() {
       />
 
       {/* Main content */}
-      <main className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-24">
+      <main className="relative z-10 flex h-full flex-col items-center justify-center px-6">
         {/* Floating badge */}
         <div className="animate-float mb-8">
           <div className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm">
@@ -76,46 +77,48 @@ export default function Home() {
         </p>
 
         {/* Action buttons */}
-        <div className="flex flex-col gap-6 sm:flex-row">
+        <div className="flex flex-col gap-8 sm:flex-row">
           {/* Button 1: Análisis técnico de gráficos */}
-          <button
-            type="button"
-            className="shimmer-effect group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-[family-name:var(--font-space-grotesk)] font-semibold text-white backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:border-violet-500/50 hover:bg-white/10 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)] active:scale-100"
-          >
-            {/* AI Badge */}
-            <span className="animate-badge-pulse absolute -right-2 -top-2 flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg">
+          <div className="relative">
+            {/* AI Badge - fuera del botón para evitar overflow issues */}
+            <span className="animate-badge-pulse absolute -right-3 -top-3 z-20 flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-violet-500/50">
               <Zap className="h-3 w-3" />
               IA
             </span>
+            <Link
+              href="/analisis-tecnico"
+              className="shimmer-effect group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-[family-name:var(--font-space-grotesk)] font-semibold text-white backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:border-violet-500/50 hover:bg-white/10 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)] active:scale-100"
+            >
+              <TrendingUp className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <span>Análisis técnico de gráficos</span>
 
-            <TrendingUp className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
-            <span>Análisis técnico de gráficos</span>
-
-            {/* Hover glow effect */}
-            <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-40" />
-          </button>
+              {/* Hover glow effect */}
+              <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-40" />
+            </Link>
+          </div>
 
           {/* Button 2: Búsqueda avanzada */}
-          <button
-            type="button"
-            className="shimmer-effect group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-[family-name:var(--font-space-grotesk)] font-semibold text-white backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:border-violet-500/50 hover:bg-white/10 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)] active:scale-100"
-          >
-            {/* AI Badge */}
-            <span className="animate-badge-pulse absolute -right-2 -top-2 flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg">
+          <div className="relative">
+            {/* AI Badge - fuera del botón para evitar overflow issues */}
+            <span className="animate-badge-pulse absolute -right-3 -top-3 z-20 flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider shadow-lg shadow-violet-500/50">
               <Zap className="h-3 w-3" />
               IA
             </span>
+            <button
+              type="button"
+              className="shimmer-effect group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-[family-name:var(--font-space-grotesk)] font-semibold text-white backdrop-blur-sm transition-all duration-500 hover:scale-105 hover:border-violet-500/50 hover:bg-white/10 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)] active:scale-100"
+            >
+              <Search className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-12deg] group-hover:scale-110" />
+              <span>Búsqueda avanzada</span>
 
-            <Search className="h-5 w-5 transition-transform duration-300 group-hover:rotate-[-12deg] group-hover:scale-110" />
-            <span>Búsqueda avanzada</span>
-
-            {/* Hover glow effect */}
-            <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-40" />
-          </button>
+              {/* Hover glow effect */}
+              <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-40" />
+            </button>
+          </div>
         </div>
 
         {/* Tech stack indicators */}
-        <div className="mt-20 flex flex-wrap items-center justify-center gap-8 opacity-40">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-40">
           <div className="flex items-center gap-2 text-sm text-zinc-500">
             <div className="h-2 w-2 rounded-full bg-green-500" />
             <span className="font-[family-name:var(--font-space-grotesk)]">Neural Networks</span>
@@ -135,7 +138,7 @@ export default function Home() {
       </main>
 
       {/* Footer - Course reference */}
-      <footer className="relative z-10 pb-8">
+      <footer className="absolute bottom-4 left-0 right-0 z-10">
         <div className="flex flex-col items-center justify-center gap-3">
           <a
             href="https://devexpert.io/cursos/expert/ai"

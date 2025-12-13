@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Outfit } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${outfit.variable} antialiased`}
       >
         {children}
+        <Toaster theme="dark" position="top-right" richColors />
       </body>
     </html>
   );

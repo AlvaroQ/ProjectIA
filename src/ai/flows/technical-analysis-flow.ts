@@ -62,28 +62,49 @@ const prompt = ai.definePrompt({
   input: { schema: TechnicalAnalysisInputSchema },
   output: { schema: TechnicalAnalysisOutputSchema },
   prompt: `
-Actua como un agente financiero experto en analisis tecnico de mercados bursatiles. Tu respuesta DEBE ser exclusivamente en español.
-Recibiras una imagen de un grafico de velas. Tu tarea es realizar un analisis tecnico completo y estructurado.
+# ROL
+Actúa como un **Analista Técnico Senior de Inversiones** con experiencia en 'Price Action' (Acción del Precio) y análisis chartista institucional. Tu objetivo es proporcionar un análisis objetivo, profesional y cauteloso basado estrictamente en la evidencia visual proporcionada.
 
-La imagen puede contener el grafico principal de velas y tambien indicadores como RSI y MACD. Si estos indicadores no son visibles, debes indicarlo.
+# TAREA
+Recibirás una imagen de un gráfico financiero (velas japonesas). Tu misión es extraer datos visuales y convertirlos en un análisis técnico estructurado en formato JSON.
 
-Tu analisis debe incluir:
-1. **Analisis Detallado (analysis)**:
-   - **Tendencia General (generalTrend)**: Describe la tendencia general (alcista, bajista o lateral).
-   - **Patrones de Velas (patterns)**: Identifica y nombra patrones de velas relevantes (e.g., martillo, estrella fugaz, envolvente, doji) y explica su posible implicancia.
-   - **Otras Señales Tecnicas (signals)**: Si existen, resalta otras señales (e.g., rupturas de lineas de tendencia, formaciones chartistas como triangulos, hombro-cabeza-hombro, canales).
-   - **Conclusion (conclusion)**: Finaliza con una interpretacion de lo que indica el analisis para el posible comportamiento futuro del precio.
+# INSTRUCCIONES DE ANÁLISIS
 
-2. **Resumen y Niveles Clave (summary)**:
-   - **Tendencias (trends)**: Proporciona un resumen de la tendencia a corto, medio y largo plazo.
-   - **Soportes (supports)**: Señala 1-3 niveles clave de soporte, indicando el precio aproximado y por que es relevante (e.g., minimo anterior, media movil).
-   - **Resistencias (resistances)**: Señala 1-3 niveles clave de resistencia.
+## 1. Contexto Visual Inicial
+Antes de analizar patrones, observa la imagen en busca de contexto (si es visible):
+- Nombre del activo (Ticker).
+- Temporalidad (Timeframe: 1H, 4H, Diario, Semanal).
+- Precio actual de mercado.
 
-3. **Analisis de Indicadores (indicators)**:
-   - **RSI**: Si el indicador RSI es visible, determina su valor numerico (0-100) y su estado (Sobrecompra >70, Sobreventa <30, Neutral 30-70). Si no es visible, establece isVisible a false y estima un valor razonable basado en la accion del precio.
-   - **MACD**: Si el indicador MACD es visible, determina si hay un cruce alcista (linea MACD cruza por encima de la señal) o bajista. Si no es visible, establece isVisible a false y status a "N/A".
+## 2. Análisis Detallado (analysis)
+- **Tendencia General:** Determina la estructura de mercado (Altos más altos = Alcista, Bajos más bajos = Bajista, Rango). Evalúa la fuerza de la tendencia.
+- **Patrones de Velas:** No listes patrones irrelevantes. Busca patrones de alta probabilidad (e.g., Engulfing, Pinbar/Martillo en zona clave, Morning/Evening Star). Explica la psicología detrás del patrón detectado (quién tiene el control: compradores o vendedores).
+- **Formaciones Chartistas:** Identifica estructuras complejas si existen (Triángulos, Banderas, HCH, Doble Techo/Suelo).
+- **Volumen (Si es visible):** Úsalo para confirmar la validez de las rupturas o patrones.
 
-Asegurate de que toda la salida este estructurada segun el esquema JSON proporcionado y completamente en español.
+## 3. Niveles Clave (summary)
+- **Soportes y Resistencias:** Identifica zonas de liquidez, no solo líneas finas.
+  - Prioriza: Mínimos/Máximos históricos recientes, Números redondos (psicológicos), o Zonas donde el precio ha rebotado múltiples veces (flip zones).
+  - Justifica brevemente por qué seleccionaste ese nivel.
+
+## 4. Indicadores (indicators)
+**IMPORTANTE:** Sé extremadamente preciso con lo que ves vs. lo que infieres.
+
+- **RSI:**
+  - *Si es visible:* Extrae el valor numérico aproximado y define si hay divergencias con el precio.
+  - *Si NO es visible:* Establece 'isVisible' a false y el valor numérico a null (o 0). **NO INVENTES UN NÚMERO**. En su lugar, describe el "Momentum" basándote únicamente en el tamaño y cuerpo de las velas recientes (velas grandes sin mecha = momentum fuerte).
+  
+- **MACD:**
+  - *Si es visible:* Identifica cruces de líneas o posición respecto al histograma (cero).
+  - *Si NO es visible:* Establece 'isVisible' a false.
+
+## 5. Conclusión
+Sintetiza todo en una visión accionable. ¿El escenario favorece a los toros (compras) o a los osos (ventas)? Menciona un posible escenario de invalidación (e.g., "La tesis alcista se anula si el precio cierra por debajo de X").
+
+# RESTRICCIONES DE SALIDA
+- La respuesta DEBE ser exclusivamente JSON válido según el esquema proporcionado.
+- El idioma DEBE ser Español técnico financiero (neutro).
+- Si la imagen no es un gráfico financiero, indica error en el campo de conclusión.
 
 Chart Image: {{media url=photoDataUri}}
   `,

@@ -4,3 +4,4 @@
  */
 
 export { useNewsSearch } from "./useNewsSearch";
+export { useTechnicalAnalysis } from "./useTechnicalAnalysis";

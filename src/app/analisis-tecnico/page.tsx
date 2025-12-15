@@ -29,8 +29,10 @@ import {
   Activity
 } from "lucide-react"
 import { toast } from "sonner"
-import { technicalAnalysis, type TechnicalAnalysisOutput } from "@/ai/flows/technical-analysis-flow"
+import { useTechnicalAnalysis } from "@/hooks"
+import { ApiKeyRequired } from "@/components/shared"
 import { cn } from "@/lib/utils"
+import type { TechnicalAnalysisOutput } from "@/services/gemini-client"
 
 // ============================================
 // COMPONENTES DE VISUALIZACION PREMIUM
@@ -164,9 +166,8 @@ const MacdIndicator = ({ status, comment, isVisible }: { status: string, comment
 
 export default function TechnicalAnalysisPage() {
   const [imagePreview, setImagePreview] = React.useState<string | null>(null)
-  const [analysisResult, setAnalysisResult] = React.useState<TechnicalAnalysisOutput | null>(null)
-  const [isLoading, setIsLoading] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const { result: analysisResult, isLoading, error, analyze, reset: resetAnalysis } = useTechnicalAnalysis()
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -183,7 +184,7 @@ export default function TechnicalAnalysisPage() {
     const reader = new FileReader()
     reader.onloadend = () => {
       setImagePreview(reader.result as string)
-      setAnalysisResult(null)
+      resetAnalysis()
     }
     reader.readAsDataURL(file)
   }
@@ -216,23 +217,25 @@ export default function TechnicalAnalysisPage() {
       toast.error("Por favor, sube una imagen primero.")
       return
     }
-    setIsLoading(true)
-    setAnalysisResult(null)
-    try {
-      const result = await technicalAnalysis({ photoDataUri: imagePreview })
-      setAnalysisResult(result)
-      toast.success("Analisis completado exitosamente")
-    } catch (error) {
-      console.error("Error during technical analysis:", error)
-      toast.error("No se pudo completar el analisis. Por favor, intentalo de nuevo.")
-    } finally {
-      setIsLoading(false)
-    }
+    await analyze(imagePreview)
   }
+
+  // Mostrar toast de éxito o error
+  React.useEffect(() => {
+    if (analysisResult) {
+      toast.success("Analisis completado exitosamente")
+    }
+  }, [analysisResult])
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error)
+    }
+  }, [error])
 
   const handleReset = () => {
     setImagePreview(null);
-    setAnalysisResult(null);
+    resetAnalysis();
     if(fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -514,6 +517,7 @@ export default function TechnicalAnalysisPage() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-1 container mx-auto p-4 md:p-6 lg:p-8 overflow-hidden">
+        <ApiKeyRequired type="gemini">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 h-full">
 
           {/* ==================== */}
@@ -659,6 +663,7 @@ export default function TechnicalAnalysisPage() {
             </CardContent>
           </Card>
         </div>
+        </ApiKeyRequired>
       </main>
     </div>
   );

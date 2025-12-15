@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { NewsItem, SearchResponse } from "@/types";
+import { searchNewsWithPerplexity } from "@/services/perplexity-client";
+import { useApiKeys } from "@/context";
+import type { NewsItem } from "@/types";
 
 /**
  * Estado del hook de busqueda de noticias
@@ -27,20 +29,22 @@ interface UseNewsSearchReturn extends UseNewsSearchState {
   search: (ticker: string) => Promise<void>;
   /** Resetea el estado del hook */
   reset: () => void;
+  /** Indica si la API key esta configurada */
+  hasApiKey: boolean;
 }
 
 /**
  * Hook personalizado para busqueda de noticias financieras
  *
- * Encapsula toda la logica de:
- * - Llamada a la API
- * - Manejo de estados (loading, error, success)
- * - Validacion basica de input
+ * Utiliza el sistema BYOK (Bring Your Own Key) para llamar
+ * directamente a la API de Perplexity desde el cliente.
  *
  * @example
  * ```tsx
  * function SearchPage() {
- *   const { news, isLoading, error, search, reset } = useNewsSearch();
+ *   const { news, isLoading, error, search, reset, hasApiKey } = useNewsSearch();
+ *
+ *   if (!hasApiKey) return <ConfigureApiKey />;
  *
  *   const handleSearch = (ticker: string) => {
  *     search(ticker);
@@ -53,6 +57,8 @@ interface UseNewsSearchReturn extends UseNewsSearchState {
  * ```
  */
 export function useNewsSearch(): UseNewsSearchReturn {
+  const { perplexityApiKey, hasPerplexityKey } = useApiKeys();
+
   const [state, setState] = useState<UseNewsSearchState>({
     news: [],
     ticker: null,
@@ -75,6 +81,15 @@ export function useNewsSearch(): UseNewsSearchReturn {
       return;
     }
 
+    // Verificar que la API key este configurada
+    if (!hasPerplexityKey || !perplexityApiKey) {
+      setState((prev) => ({
+        ...prev,
+        error: "API Key de Perplexity no configurada. Ve a Configuracion para agregarla.",
+      }));
+      return;
+    }
+
     // Iniciar busqueda
     setState((prev) => ({
       ...prev,
@@ -84,25 +99,16 @@ export function useNewsSearch(): UseNewsSearchReturn {
     }));
 
     try {
-      const response = await fetch("/api/busqueda", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ticker: trimmedTicker }),
+      const result = await searchNewsWithPerplexity({
+        apiKey: perplexityApiKey,
+        ticker: trimmedTicker,
       });
-
-      const data: SearchResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || `Error ${response.status}`);
-      }
 
       // Busqueda exitosa
       setState((prev) => ({
         ...prev,
-        news: data.news,
-        ticker: data.ticker,
+        news: result.news,
+        ticker: result.ticker,
         isLoading: false,
         error: null,
       }));
@@ -115,7 +121,7 @@ export function useNewsSearch(): UseNewsSearchReturn {
         error: err instanceof Error ? err.message : "Error desconocido",
       }));
     }
-  }, []);
+  }, [perplexityApiKey, hasPerplexityKey]);
 
   /**
    * Resetea el estado del hook
@@ -134,5 +140,6 @@ export function useNewsSearch(): UseNewsSearchReturn {
     ...state,
     search,
     reset,
+    hasApiKey: hasPerplexityKey,
   };
 }

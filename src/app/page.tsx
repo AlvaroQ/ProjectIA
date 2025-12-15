@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, TrendingUp, Search, Zap, GraduationCap } from "lucide-react";
+import { Sparkles, TrendingUp, Search, Zap, GraduationCap, Settings } from "lucide-react";
 
 export default function Home() {
   return (
@@ -117,8 +117,17 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Configuration link */}
+        <Link
+          href="/configuracion"
+          className="mt-8 flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+        >
+          <Settings className="h-4 w-4" />
+          <span className="font-[family-name:var(--font-space-grotesk)]">Configurar API Keys</span>
+        </Link>
+
         {/* Tech stack indicators */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-40">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-8 opacity-40">
           <div className="flex items-center gap-2 text-sm text-zinc-500">
             <div className="h-2 w-2 rounded-full bg-green-500" />
             <span className="font-[family-name:var(--font-space-grotesk)]">Neural Networks</span>

@@ -8,7 +8,19 @@
       "Bash(npm run build:*)",
       "Bash(gh auth:*)",
       "Bash(winget install:*)",
-      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" auth status)"
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" auth status)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest add tabs table card input label toast button -y)",
+      "Bash(npx shadcn@latest add tabs table card input label button sonner -y)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "WebFetch(domain:docs.perplexity.ai)",
+      "Bash(cat:*)",
+      "Bash(dir /s \"E:\\Personal\\Repositorios\\ProyectIA\\src\")",
+      "Bash(dir \"E:\\Personal\\Repositorios\\ProyectIA\")"
     ]
   }
 }

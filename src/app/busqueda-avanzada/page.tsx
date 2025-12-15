@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { PageHeader, LoadingSpinner, EmptyState } from "@/components/shared";
+import { PageHeader, LoadingSpinner, EmptyState, ApiKeyRequired } from "@/components/shared";
 import { useNewsSearch } from "@/hooks";
 import { UI_MESSAGES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -250,6 +250,7 @@ export default function BusquedaAvanzadaPage() {
 
       {/* Main Content */}
       <main className="relative z-10 flex-1 container mx-auto p-4 md:p-6 lg:p-8">
+        <ApiKeyRequired type="perplexity">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Search Card */}
           <Card className="glass border-zinc-800/50 overflow-hidden">
@@ -352,6 +353,7 @@ export default function BusquedaAvanzadaPage() {
             </CardContent>
           </Card>
         </div>
+        </ApiKeyRequired>
       </main>
     </div>
   );

@@ -6,6 +6,10 @@ Una aplicación full-stack de análisis financiero potenciada por inteligencia a
 
 **https://project-ia-three.vercel.app/**
 
+<p align="center">
+  <img src="assets/screenshot.png" alt="Vista previa de la aplicación" width="800">
+</p>
+
 ## Tabla de Contenidos
 
 - [Demo](#demo)
